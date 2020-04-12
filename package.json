@@ -1,0 +1,33 @@
+{
+  "name": "@ikamva/vimeo-uploader",
+  "version": "0.0.1",
+  "description": "lib to upload video to vimeo",
+  "main": "lib/vimeo-uploader",
+  "typings": "lib/vimeo-uploader",
+  "author": "Sivuyile Magutywa",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc -p .",
+    "start": "tsc vimeo-uploader.ts -d",
+    "generate": "webpack ./example/index.ts"
+  },
+  "keywords": [
+    "vimeo"
+  ],
+  "maintainers": [
+    {
+      "name": "Sivuyile Magutywa",
+      "email": "sivuyile.magutywa.applicafro@gmail.com"
+    }
+  ],
+  "peerDependencies": {
+    "axios": "^0.19.2"
+  },
+  "dependencies": {
+    "axios": "^0.19.2"
+  },
+  "devDependencies": {
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11"
+  }
+}
