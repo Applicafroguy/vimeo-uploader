@@ -1,46 +1,72 @@
 import VimeoUploader from "../lib/vimeo-uploader";
 
-console.log("test");
+let file;
+const token = "0fcd510611cca409e758ff73fc60fbcd";
+const url = "https://api.vimeo.com/me";
+
+const init = () => {
+  const inputElement = document.getElementById("video");
+
+  inputElement.addEventListener(
+    "change",
+    (event) => {
+      file = event.target["files"][0];
+    },
+    false
+  );
+
+  const btn = document.getElementById("upload");
+  btn.addEventListener("click", () => {
+    uploadVideo();
+    console.log("test");
+  });
+};
 
 const v = new VimeoUploader();
-const createVideo = async () => {
-  await v.createVideo(
-    "https://api.vimeo.com/me/videos",
-    {
-      upload: {
-        size: 800,
-        approach: "tus",
-      },
-    },
-    {
-      Authorization: "bearer ",
-      Accept: "application/vnd.vimeo.*+json;version=3.4",
-      "Content-Type": "application/json",
-    }
-  );
-};
 
 const uploadVideo = async () => {
-  await v.uploadVideo(
-    "https://api.vimeo.com/me/videos",
+  console.log("File", file.size);
+  const res = await v.createVideo(
+    url + "/videos",
     {
-      name: "",
-      description: "",
-      privacy: {
-        embed: "private",
-        view: "nobody",
-        download: "true",
-      },
       upload: {
-        size: 800,
+        size: file.size,
         approach: "tus",
       },
     },
     {
-      Authorization:
-        "bearer 56o0Tz5DzDb141LJKwIzy0mz/hrG0oW+Ozp9G5E5VInhLKm+0rxmoI5LBEBTyd40X+y6fdmK4XLsl8PxQKYGd92ot8CI6r4GKpr0fTmN02lX8LRmqo9gI6O27Rykaz72",
-      Accept: "application/vnd.vimeo.*+json;version=3.4",
+      Authorization: `bearer ${token}`,
       "Content-Type": "application/json",
+      Accept: "application/vnd.vimeo.*+json;version=3.4",
     }
   );
+
+  if (res.status === 200) {
+    const sent = await v.uploadVideo(
+      `${url}${res.data.uri}`,
+      {
+        name: file.name,
+        description: "Video ",
+        privacy: {
+          embed: "private",
+          view: "nobody",
+          download: "true",
+        },
+        upload: {
+          size: file.size,
+          approach: "tus",
+          upload_link: res.data.upload_link,
+        },
+      },
+      {
+        Authorization: `bearer ${token}`,
+        Accept: "application/vnd.vimeo.*+json;version=3.4",
+        "Content-Type": "application/offset+octet-stream",
+        "Tus-Resumable": "1.0.0",
+        "Upload-Offset": 0,
+      }
+    );
+  }
 };
+
+init();

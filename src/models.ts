@@ -17,7 +17,7 @@ export interface IHeader {
   "Content-Type"?: ContentType;
   Accept?: string;
   "Tus-Resumable"?: string;
-  "Upload-Offset"?: string;
+  "Upload-Offset"?: number;
 }
 
 /**
